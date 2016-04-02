@@ -83,6 +83,8 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
     DemoPlayer.Listener, DemoPlayer.CaptionListener, DemoPlayer.Id3MetadataListener,
     AudioCapabilitiesReceiver.Listener {
 
+  private static final String LOG_TAG = PlayerActivity.class.getSimpleName();
+
   // For use within demo app code.
   public static final String CONTENT_ID_EXTRA = "content_id";
   public static final String CONTENT_TYPE_EXTRA = "content_type";
@@ -216,12 +218,20 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
   @Override
   public void onPause() {
     super.onPause();
+    Log.d(LOG_TAG,"onPause");
     if (!enableBackgroundAudio) {
       releasePlayer();
     } else {
       player.setBackgrounded(true);
     }
     shutterView.setVisibility(View.VISIBLE);
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    Log.d(LOG_TAG,"onStop");
+
   }
 
   @Override
@@ -720,5 +730,13 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
       return super.dispatchKeyEvent(event);
     }
   }
+
+    /* MultiWindow Support */
+
+    @Override
+    public void onMultiWindowChanged(boolean inMultiWindow) {
+        super.onMultiWindowChanged(inMultiWindow);
+        Log.d(LOG_TAG,"onMultiWindowChanged : inMultiWindow: " + inMultiWindow);
+    }
 
 }
